@@ -1,5 +1,7 @@
 from decorators.errors import input_error
-from task_bot.classes import AddressBook, Record
+from classes.AddressBook import AddressBook
+from classes.Record import Record
+
 
 @input_error
 def parse_input(user_input):
@@ -9,9 +11,6 @@ def parse_input(user_input):
 
 @input_error
 def add_contact(args, book: AddressBook):
-    # name, phone = args
-    # contacts[name] = phone
-    # return "Contact added."
     name, phone, *_ = args
     record = book.find(name)
     message = "Contact updated."
@@ -26,30 +25,33 @@ def add_contact(args, book: AddressBook):
 
 @input_error
 def change_contact(args, book: AddressBook):
-    # name, phone = args
-    # contacts[name] = phone
-    # return "Contact updated."
     name, old_phone, new_phone = args
     record = book.find(name)
-    record.edit_phone(old_phone, new_phone)
-    return "Contact updated."
+    if(record):
+        record.edit_phone(old_phone, new_phone)
+        return "Contact updated."
+    else:
+        raise AttributeError('Please, first create contact with command "add [name] [phone]".')
 
 
 @input_error
 def show_phone(args, book: AddressBook):
-    name = args
-    record = book.find(name)
-    for phone in  record.phones:
-        return f"{phone}"
-               
+    name, *_ = args
+    if(record):
+        record = book.find(name)
+        return f"{'; '.join(p.value for p in record.phones)}"
+    else:
+        raise AttributeError('Please, first create contact with command "add [name] [phone]".')
+    
 
 @input_error
 def show_all(book: AddressBook):
     contacts = book.data
     if len(contacts):
         str_ = ''
-        for name, phone in contacts.items():
-            str_ += name + ' ' + phone + '\n'
+        for name, record in contacts.items():
+            phones = record.phones
+            str_ += f"Contact name: {name}, phones: {'; '.join(p.value for p in phones)}" + '\n'
         return str_ 
     else:
         return "Your contacts list is empty."
@@ -59,19 +61,27 @@ def show_all(book: AddressBook):
 def add_birthday(args, book: AddressBook):
     name, bday_date = args
     record = book.find(name)
-    record.add_birthday(bday_date)
-    return "Birthday date added."
+    if(record):
+        record.add_birthday(bday_date)
+        return "Birthday date added."
+    else:
+        raise AttributeError('Please, first create contact with command "add [name] [phone]".')
 
 
 @input_error
 def show_birthday(args, book: AddressBook):
-    name = args
+    name, *_ = args
     record = book.find(name)
-    return f"{record.birthday}"
+    if(record.birthday):
+        return f"{record.birthday}"
+    else:
+        return "No birthday date."
 
 
 @input_error
 def birthdays(book: AddressBook):
     upcoming_bdays = book.get_upcoming_birthdays()
+    str_ = ''
     for bday in upcoming_bdays:
-        return f"{bday}"
+        str_ += f"{bday}" + '\n'
+    return str_

@@ -1,5 +1,6 @@
+from classes.AddressBook import AddressBook
 from handlers import add_birthday, birthdays, parse_input, add_contact, change_contact, show_all, show_birthday, show_phone
-from task_bot.classes import AddressBook
+
 
 def main():
   book = AddressBook()

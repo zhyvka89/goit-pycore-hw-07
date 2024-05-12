@@ -1,5 +1,5 @@
-from task_bot.classes.Field import Field
 from datetime import datetime
+from classes.Field import Field
 
 
 class Birthday(Field):

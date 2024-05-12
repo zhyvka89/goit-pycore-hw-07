@@ -1,4 +1,4 @@
-from task_bot.classes.Field import Field
+from classes.Field import Field
 
 
 class Phone(Field):

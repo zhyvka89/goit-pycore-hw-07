@@ -1,5 +1,6 @@
-from task_bot.classes.Name import Name
-from task_bot.classes.Phone import Phone
+from classes.Birthday import Birthday
+from classes.Name import Name
+from classes.Phone import Phone
 
 
 class Record:
@@ -15,7 +16,7 @@ class Record:
         self.phones.append(Phone(phone_number))
 
     def add_birthday(self, bday_date):
-        self.birthday = bday_date
+        self.birthday = Birthday(bday_date)
 
     def remove_phone(self, phone_number):
         if phone_number in self.phones:
@@ -32,4 +33,5 @@ class Record:
         for number in self.phones:
             if number.value == phone_number:
                 return phone_number
+            
         
